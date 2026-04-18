@@ -3,6 +3,8 @@
 ## Project Overview
 This repository contains a dynamic cryptographic controller for Vehicular Ad-hoc Networks (VANETs). The system implements an adaptive scaling mechanism for the ASCON-128 algorithm, adjusting the permutation rounds between 12 ($p_a$) and 8 ($p_b$) based on real-time network stress to optimize latency while maintaining high security.
 
+![Performance Benchmark](docs/performance_comparison_v2.png)
+
 ## Key Features
 - **Vectorized ASCON-128**: Optimized MATLAB implementation using 64-bit integer logic.
 - **Adaptive Scaling**: Dynamic round selection controlled by a Criticality Index ($C_i$).

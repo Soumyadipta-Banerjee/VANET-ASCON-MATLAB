@@ -41,6 +41,8 @@ Our results demonstrate a hardware-realistic performance gain consistent with th
 By design, ASCON-128 is more efficient than standard hashes like SHA-256 for small VANET packets due to its lower round count (12 vs 64) and optimized bit-logic. This ensures lower energy consumption per message.
 
 #### Layer 2: Adaptive Latency Reduction (Our Optimization)
+![Performance Comparison](docs/performance_comparison_v2.png)
+
 The primary innovation is the **Adaptive Round Scaling** (dropping from 12 rounds to the 8-round failsafe). In our high-integrity statistical audit (100 iterations):
 - **Security Mode (12 rounds)**: Baseline
 - **Audited Mean Latency (8 rounds)**: **33.24% Reduction**
