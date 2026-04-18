@@ -32,23 +32,26 @@ Develop a dynamic cryptographic controller for Vehicular Ad-hoc Networks (VANETs
 ### 3.2 Security Proof (Module 4)
 - **Strict Avalanche Criterion (SAC)**: Verified via 10,000-trial Monte Carlo simulation.
 - **Measured Result**: **50.07% average bit-flip** for 8-round mode.
-- **Conclusion**: 8-round mode provides full diffusion for short-term safety messages.
 
-## 4. Repository Structure & Tooling
-- `/src/core/`: Bit-accurate vectorized ASCON logic.
-- `/src/engine/`: Telemetry processing and criticality scaling logic.
-- `/src/analyzer/`: SAC security verification engine.
-- `/scripts/`: Statistical benchmarks and professional visualization.
-- `/docs/walkthrough.md`: Detailed module-by-module breakdown.
-- **Toolboxes Required**: Statistics and Machine Learning, Parallel Computing, Control Systems.
+---
 
-## 5. Phase 2 Roadmap (For Future Handoff)
+## 4. Technical Implementation Map (Code Handoff)
 
-### Module 5: Hardware Mapping (FPGA/ASIC)
-- **Goal**: Translate MATLAB matrix logic into synthesizable Verilog/VHDL.
-- **Constraint**: Maintain the 33% power/latency reduction seen in the software model.
-- **Target**: Explore "unrolling" permutations to 8/12 cycles depending on the $C_i$ bit-signal.
+Use this section to instantly identify the current state of all codebase modifications for future development.
 
-### Module 6: VANET Network Integration
-- **Platform**: OMNeT++ with Veins/SUMO.
-- **Task**: Interface the ASCON core with simulated Wave/DSRC packet flows to measure "End-to-End" latency gain.
+### 4.1 Cryptographic Core (`src/core/`)
+- **[MODIFY] `ascon_permutation.m`**: The core permutation was refactored from serial logic to a **Vectorized Matrix Core**. Rotations are **inlined** to eliminate function call overhead. It accepts a $5 \times N$ state.
+- **[MODIFY] `ascon_aead.m`**: Higher-level wrapper that manages the $5 \times N$ matrix flow. All AEAD operations (Init, Associated Data, Payload) now support batch processing.
+
+### 4.2 Adaptive Logic (`src/engine/`)
+- **[NEW] `calculate_criticality.m`**: Implements the weighted $C_i$ formula. This is the **brain** of the system.
+- **[NEW] `telemetry_simulator.m`**: Generates synthetic $v, B, P$ values for testing the adaptive threshold.
+
+### 4.3 Validation & Security (`src/analyzer/` & `scripts/`)
+- **[NEW] `sac_analyzer.m`**: Located in `src/analyzer/`. Performs Monte Carlo bit-flip analysis to prove the 8-round failsafe meets the 50% Avalanche criterion.
+- **[MODIFY] `benchmark_adaptive_ascon.m`**: Converted into a functional script to allow programmatic calls during statistical audits.
+- **[NEW] `check_consistency.m`**: In `scripts/`. Executes the **100-run audit**. This is the source of the authoritative 33.24% performance claim.
+
+### 4.4 Documentation & Assets (`docs/`)
+- **[NEW] `performance_comparison_v2.png`**: The final **Research-Grade** visualization. Uses an airy layout (8-inch height) and journal aesthetics to display the 33.24% speedup.
+- **[MODIFY] `MIDTERM_REPORT.md`**: The master deliverable. Contains technical deep-dives into all modules and embeds the final v2 infographic.
