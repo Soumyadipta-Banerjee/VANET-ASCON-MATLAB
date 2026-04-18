@@ -1,0 +1,9 @@
+- [x] Install Linux system dependencies (Debian Trixie)
+- [x] Install MATLAB R2026a using GUI installer
+- [x] Activate MATLAB using credentials
+- [ ] Verify installation and update documentation
+- [x] Initialize Module 1 (ASCON Core) logic
+    - [x] Implement `ascon_permutation.m`
+    - [x] Implement `ascon_aead.m`
+    - [x] Implement `verify_core.m`
+    - [x] Run verification tests against reference logic
