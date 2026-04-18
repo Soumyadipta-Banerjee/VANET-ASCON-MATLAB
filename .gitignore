@@ -1,0 +1,4 @@
+*.asv
+*.log
+scratch/
+ascon_reference/
