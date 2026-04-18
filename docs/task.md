@@ -7,3 +7,10 @@
     - [x] Implement `ascon_aead.m`
     - [x] Implement `verify_core.m`
     - [x] Run verification tests against reference logic
+- [x] Module 2 (Decision Engine & Telemetry)
+    - [x] Implement `telemetry_generator.m`
+    - [x] Implement `calculate_criticality.m`
+    - [x] Create `adaptive_ascon_demo.m`
+    - [x] Verify transition logic (Ci Threshold = 0.7)
+- [ ] Module 3 (Benchmark & Logging)
+- [ ] Module 4 (Security Analysis - SAC)
