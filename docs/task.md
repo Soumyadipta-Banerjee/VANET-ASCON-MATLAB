@@ -12,5 +12,9 @@
     - [x] Implement `calculate_criticality.m`
     - [x] Create `adaptive_ascon_demo.m`
     - [x] Verify transition logic (Ci Threshold = 0.7)
+- [x] Project Reorganization (Professional Structure)
+    - [x] Create `src/`, `tests/`, `scripts/`
+    - [x] Implement `setup_project.m` for path management
+    - [x] Update `README.md` and `docs/`
 - [ ] Module 3 (Benchmark & Logging)
 - [ ] Module 4 (Security Analysis - SAC)

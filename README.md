@@ -10,12 +10,14 @@ This repository contains a dynamic cryptographic controller for Vehicular Ad-hoc
 - **Verification Suite**: Cross-validated logic against official ASCON reference code.
 
 ## Repository Structure
-- `ascon_permutation.m`: Core SPN permutation logic.
-- `ascon_aead.m`: Authenticated Encryption with Associated Data (AEAD) implementation.
-- `verify_core.m`: Cryptographic verification script.
-- `docs/`: Implementation plans, task tracking, and walkthroughs.
+- **`src/`**: Project source code.
+    - `core/`: Optimized ASCON-128 cryptographic functions.
+    - `engine/`: Decision logic and telemetry simulators.
+- **`tests/`**: Unit tests and cryptographic verification scripts.
+- **`scripts/`**: Simulation drivers and performance benchmarks.
+- **`docs/`**: Project architecture, task tracking, and walkthroughs.
+- `setup_project.m`: Run this first to initialize MATLAB paths.
 - `dev_log.md`: Chronological development log.
-- `project_context.md`: Mathematical models and architectural rules.
 
 ## Getting Started
 ### Prerequisites
@@ -24,9 +26,10 @@ This repository contains a dynamic cryptographic controller for Vehicular Ad-hoc
 - Parallel Computing Toolbox
 
 ### Verification
-To verify the core logic, run the following command in the MATLAB desktop or terminal:
+To verify the core logic, run the following commands in MATLAB:
 ```matlab
-verify_core
+setup_project  % Initializes paths
+verify_core    % Runs verification
 ```
 
 ## Mid-Term Evaluation Modules
