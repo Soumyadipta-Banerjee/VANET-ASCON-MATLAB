@@ -16,5 +16,9 @@
     - [x] Create `src/`, `tests/`, `scripts/`
     - [x] Implement `setup_project.m` for path management
     - [x] Update `README.md` and `docs/`
-- [ ] Module 3 (Benchmark & Logging)
+- [x] Module 3 (Benchmark & Logging)
+    - [x] Create `benchmark_adaptive_ascon.m`
+    - [x] Implement timing logic (Fixed vs Adaptive)
+    - [x] Implement `log_benchmark_results.m`
+    - [x] Analyze results (Latency % reduction)
 - [ ] Module 4 (Security Analysis - SAC)
