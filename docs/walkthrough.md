@@ -39,5 +39,24 @@ To ensure mathematical correctness, I traced the state transitions against a cus
 > [!TIP]
 > **Numeric Precision Fix**: I resolved a MATLAB `double` precision issue where `hex2dec` was losing bits for 64-bit values. All implementations now use direct `0x...` hexadecimal literals for 100% bit-accuracy.
 
+## 4. Module 2: The Decision Engine (Adaptive Scaling)
+We have implemented the context-aware logic to dynamically toggle between high-security (12 rounds) and low-latency (8 rounds) modes.
+
+### Components
+- **[telemetry_generator.m](file:///home/soumya/SU2/VANET-ASCON-MATLAB/telemetry_generator.m)**: Simulates Highway, Urban, and Emergency scenarios.
+- **[calculate_criticality.m](file:///home/soumya/SU2/VANET-ASCON-MATLAB/calculate_criticality.m)**: Computes the Criticality Index ($C_i$).
+- **[adaptive_ascon_demo.m](file:///home/soumya/SU2/VANET-ASCON-MATLAB/adaptive_ascon_demo.m)**: Visualization script.
+
+### Decision Logic
+The system uses the following weighted formula:
+$$C_i = (0.4 \cdot v) + (0.4 \cdot B) + (0.2 \cdot P)$$
+
+If $C_i \geq 0.7$, the engine automatically switches to **8-round mode** to reduce processing overhead during high network stress.
+
+## Output Snapshot
+The simulation in `adaptive_ascon_demo` confirms that as vehicle speed and buffer occupancy peak, the round count drops to 8 synchronously, then returns to 12 as the stress subsides.
+
 ## Next Steps
-Now that the core is stable and verified, we are ready for **Module 2: The Decision Engine**, where we will implement the Criticality Index ($C_i$) logic and start simulating vehicle stress scenarios.
+We are now entering the performance validation phase:
+- **Module 3**: Empirical Latency Benchmarking (10,000 messages).
+- **Module 4**: Security Verification (Strict Avalanche Criterion).
