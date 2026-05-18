@@ -19,54 +19,59 @@ function s = ascon_permutation(s, nr)
         s(3,:) = bitxor(s(3,:), RC(i));
         
         % 2. Substitution Layer (S-box)
-        s(1,:) = bitxor(s(1,:), s(5,:));
-        s(5,:) = bitxor(s(5,:), s(4,:));
-        s(3,:) = bitxor(s(3,:), s(2,:));
+        x0 = s(1,:);
+        x1 = s(2,:);
+        x2 = s(3,:);
+        x3 = s(4,:);
+        x4 = s(5,:);
         
-        % Temporary variables for non-linear update (all vectorized)
-        t0 = bitxor(s(1,:), bitand(bitcmp(s(2,:), 'uint64'), s(3,:)));
-        t1 = bitxor(s(2,:), bitand(bitcmp(s(3,:), 'uint64'), s(4,:)));
-        t2 = bitxor(s(3,:), bitand(bitcmp(s(4,:), 'uint64'), s(5,:)));
-        t3 = bitxor(s(4,:), bitand(bitcmp(s(5,:), 'uint64'), s(1,:)));
-        t4 = bitxor(s(5,:), bitand(bitcmp(s(1,:), 'uint64'), s(2,:)));
+        % S-box Step 1: XORs
+        w0 = bitxor(x0, x4);
+        w1 = x1;
+        w2 = bitxor(x2, x1);
+        w3 = x3;
+        w4 = bitxor(x4, x3);
         
-        % Linear transformation (diffusion layer) combined with S-box finalize
-        t1 = bitxor(t1, t0);
-        t3 = bitxor(t3, t2);
-        t0 = bitxor(t0, t4);
+        % S-box Step 2: Non-linear updates
+        T0 = bitand(bitcmp(w0, 'uint64'), w1);
+        T1 = bitand(bitcmp(w1, 'uint64'), w2);
+        T2 = bitand(bitcmp(w2, 'uint64'), w3);
+        T3 = bitand(bitcmp(w3, 'uint64'), w4);
+        T4 = bitand(bitcmp(w4, 'uint64'), w0);
         
-        % 3. Linear Diffusion Layer (Inlined rotations for performance)
-        % x0 = x0 ^ (x0 >>> 19) ^ (x0 >>> 28)
-        rot19_t0 = bitor(bitshift(t0, -19), bitactive_shift_left(t0, 64-19));
-        rot28_t0 = bitor(bitshift(t0, -28), bitactive_shift_left(t0, 64-28));
-        s(1,:) = bitxor(t0, bitxor(rot19_t0, rot28_t0));
+        % S-box Step 3: Simultaneous updates
+        w_prime_0 = bitxor(w0, T1);
+        w_prime_1 = bitxor(w1, T2);
+        w_prime_2 = bitxor(w2, T3);
+        w_prime_3 = bitxor(w3, T4);
+        w_prime_4 = bitxor(w4, T0);
         
-        % x1 = x1 ^ (x1 >>> 61) ^ (x1 >>> 39)
-        rot61_t1 = bitor(bitshift(t1, -61), bitactive_shift_left(t1, 64-61));
-        rot39_t1 = bitor(bitshift(t1, -39), bitactive_shift_left(t1, 64-39));
-        s(2,:) = bitxor(t1, bitxor(rot61_t1, rot39_t1));
+        % S-box Step 4: Final XORs
+        y1 = bitxor(w_prime_1, w_prime_0);
+        y0 = bitxor(w_prime_0, w_prime_4);
+        y3 = bitxor(w_prime_3, w_prime_2);
+        y2 = bitcmp(w_prime_2, 'uint64');
+        y4 = w_prime_4;
         
-        % x2 = x2 ^ (x2 >>> 1) ^ (x2 >>> 6)
-        rot1_t2 = bitor(bitshift(t2, -1), bitactive_shift_left(t2, 64-1));
-        rot6_t2 = bitor(bitshift(t2, -6), bitactive_shift_left(t2, 64-6));
-        s(3,:) = bitxor(t2, bitxor(rot1_t2, rot6_t2));
+        % 3. Linear Diffusion Layer (vectorized and inlined)
+        rot19_y0 = bitor(bitshift(y0, -19), bitshift(y0, 64-19));
+        rot28_y0 = bitor(bitshift(y0, -28), bitshift(y0, 64-28));
+        s(1,:) = bitxor(y0, bitxor(rot19_y0, rot28_y0));
         
-        % x3 = x3 ^ (x3 >>> 10) ^ (x3 >>> 17)
-        rot10_t3 = bitor(bitshift(t3, -10), bitactive_shift_left(t3, 64-10));
-        rot17_t3 = bitor(bitshift(t3, -17), bitactive_shift_left(t3, 64-17));
-        s(4,:) = bitxor(t3, bitxor(rot10_t3, rot17_t3));
+        rot61_y1 = bitor(bitshift(y1, -61), bitshift(y1, 64-61));
+        rot39_y1 = bitor(bitshift(y1, -39), bitshift(y1, 64-39));
+        s(2,:) = bitxor(y1, bitxor(rot61_y1, rot39_y1));
         
-        % x4 = x4 ^ (x4 >>> 7) ^ (x4 >>> 41)
-        rot7_t4 = bitor(bitshift(t4, -7), bitactive_shift_left(t4, 64-7));
-        rot41_t4 = bitor(bitshift(t4, -41), bitactive_shift_left(t4, 64-41));
-        s(5,:) = bitxor(t4, bitxor(rot7_t4, rot41_t4));
+        rot1_y2 = bitor(bitshift(y2, -1), bitshift(y2, 64-1));
+        rot6_y2 = bitor(bitshift(y2, -6), bitshift(y2, 64-6));
+        s(3,:) = bitxor(y2, bitxor(rot1_y2, rot6_y2));
         
-        % Invert x2 as per reference implementation
-        s(3,:) = bitcmp(s(3,:), 'uint64');
+        rot10_y3 = bitor(bitshift(y3, -10), bitshift(y3, 64-10));
+        rot17_y3 = bitor(bitshift(y3, -17), bitshift(y3, 64-17));
+        s(4,:) = bitxor(y3, bitxor(rot10_y3, rot17_y3));
+        
+        rot7_y4 = bitor(bitshift(y4, -7), bitshift(y4, 64-7));
+        rot41_y4 = bitor(bitshift(y4, -41), bitshift(y4, 64-41));
+        s(5,:) = bitxor(y4, bitxor(rot7_y4, rot41_y4));
     end
-end
-
-function y = bitactive_shift_left(x, n)
-    % Manual left shift for uint64 matrix as bitshift(x, 64-n) can be sensitive
-    y = bitshift(x, n);
 end

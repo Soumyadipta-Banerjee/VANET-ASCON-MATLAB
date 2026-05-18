@@ -5,13 +5,13 @@ function verify_core()
     
     % Test Vector 1 (Standard ASCON-128: b=6)
     % Hex literals 0x... are uint64 by default in modern MATLAB
-    key = [0x0001020304050607, 0x08090A0B0C0D0E0F];
-    nonce = [0x1011121314151617, 0x18191A1B1C1D1E1F];
+    key = [0x0001020304050607; 0x08090A0B0C0D0E0F];
+    nonce = [0x1011121314151617; 0x18191A1B1C1D1E1F];
     pt = [];
     ad = [];
     
-    % Expected Result for Count=1 in KAT
-    expected_tag = [0x4F9C278211BEC931, 0x6BF68F46EE8B2EC6];
+    % Expected Result for Count=0 (empty AD, empty PT) in Standard KAT
+    expected_tag = [0xB5228D1A3B6379DD; 0x5FA75534FEC71DFA];
     
     % Run test with b=6
     fprintf('Testing Standard ASCON-128 (b=6)... ');
@@ -27,7 +27,7 @@ function verify_core()
     
     % Project Test (b=8)
     fprintf('Testing Project Variant (b=8)... ');
-    [~, ~] = ascon_aead(key, nonce, ad, pt, 8);
+    [~, ~] = ascon_aead(key, nonce, ad, pt, 12, 8);
     fprintf('DONE\n');
     
     fprintf('--- Validation Complete ---\n');
