@@ -182,12 +182,62 @@ if ~exist(docs_dir, 'dir')
     mkdir(docs_dir);
 end
 fig_path = fullfile(docs_dir, 'attacker_resilience_comparison.png');
+apply_white_theme(fig);
 print(fig, fig_path, '-dpng', '-r300');
 fprintf('\nAdversarial visualization plot saved successfully to:\n%s\n', fig_path);
 
 close(fig);
 
 % --- Helper Functions ---
+function apply_white_theme(fig)
+    set(fig, 'Color', 'w');
+    set(fig, 'InvertHardcopy', 'off');
+    
+    % Find all axes objects
+    ax_handles = findall(fig, 'type', 'axes');
+    for i = 1:length(ax_handles)
+        ax = ax_handles(i);
+        set(ax, 'Color', 'w');
+        set(ax, 'XColor', 'k');
+        
+        % Check YAxis color properties for yyaxis
+        if isprop(ax, 'YAxis') && length(ax.YAxis) >= 2
+            for y_idx = 1:length(ax.YAxis)
+                % Ensure colors have visible contrast on white background
+                if isequal(ax.YAxis(y_idx).Color, [1, 1, 1]) || sum(ax.YAxis(y_idx).Color) > 2.7
+                    ax.YAxis(y_idx).Color = 'k';
+                end
+            end
+        else
+            set(ax, 'YColor', 'k');
+        end
+        
+        % Force labels and titles to black
+        if ~isempty(ax.Title)
+            ax.Title.Color = 'k';
+        end
+        if ~isempty(ax.XLabel)
+            ax.XLabel.Color = 'k';
+        end
+        if ~isempty(ax.YLabel)
+            ax.YLabel.Color = 'k';
+        end
+        
+        % Force grid color to light grey
+        set(ax, 'GridColor', [0.7, 0.7, 0.7]);
+        set(ax, 'GridAlpha', 0.6);
+    end
+    
+    % Find all legend objects
+    leg_handles = findall(fig, 'type', 'legend');
+    for i = 1:length(leg_handles)
+        leg = leg_handles(i);
+        set(leg, 'Color', 'w');
+        set(leg, 'TextColor', 'k');
+        set(leg, 'EdgeColor', [0.8, 0.8, 0.8]);
+    end
+end
+
 function k = poisson_rnd(lambda)
     if lambda <= 0
         k = 0;
