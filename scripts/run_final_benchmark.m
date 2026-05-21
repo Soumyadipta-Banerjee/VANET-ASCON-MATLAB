@@ -163,7 +163,7 @@ fprintf('Adversarial Packet Drop Reduction:  %.2f%% vs Legacy, %.2f%% vs Static\
 % 6. Plot publication-grade multi-subplot comparison (headless-safe)
 fig = figure('Name', 'VANET OBU Master Performance Benchmark', ...
              'Position', [100, 100, 1100, 800], ...
-             'Visible', 'off', ...
+             'Visible', 'on', ...
              'Color', 'w', ...
              'InvertHardcopy', 'off');
 
@@ -218,7 +218,7 @@ apply_white_theme(fig);
 print(fig, fig_path, '-dpng', '-r300');
 fprintf('\nMaster benchmark visualization plot saved successfully to:\n%s\n', fig_path);
 
-close(fig);
+% close(fig);
 
 % --- Helper Functions ---
 function apply_white_theme(fig)

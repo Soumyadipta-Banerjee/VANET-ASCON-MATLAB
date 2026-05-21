@@ -24,7 +24,7 @@ end
 % 4. Visualization
 fig = figure('Name', 'VANET Adaptive Cryptographic Controller', ...
              'Position', [100, 100, 1000, 750], ...
-             'Visible', 'off', ...
+             'Visible', 'on', ...
              'Color', 'w', ...
              'InvertHardcopy', 'off');
 
@@ -56,7 +56,7 @@ print(fig, fig_path, '-dpng', '-r300');
 fprintf('\nSimulation Complete. Round selection adaptively toggled between 12 and 8.\n');
 fprintf('Adaptive ASCON demo plot saved successfully to:\n%s\n', fig_path);
 
-close(fig);
+% close(fig);
 
 % --- Helper Functions ---
 function apply_white_theme(fig)

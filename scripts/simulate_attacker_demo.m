@@ -128,7 +128,7 @@ end
 % 8. Plot Adversarial Resilience Analysis (Headless-safe PNG save)
 fig = figure('Name', 'VANET OBU Attacker Resilience Analysis', ...
              'Position', [100, 100, 1000, 750], ...
-             'Visible', 'off', ...
+             'Visible', 'on', ...
              'Color', 'w', ...
              'InvertHardcopy', 'off');
 
@@ -186,7 +186,7 @@ apply_white_theme(fig);
 print(fig, fig_path, '-dpng', '-r300');
 fprintf('\nAdversarial visualization plot saved successfully to:\n%s\n', fig_path);
 
-close(fig);
+% close(fig);
 
 % --- Helper Functions ---
 function apply_white_theme(fig)

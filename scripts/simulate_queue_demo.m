@@ -125,7 +125,7 @@ end
 % 7. Plot Comparative Analysis (Headless-safe PNG save)
 fig = figure('Name', 'VANET OBU Queue Simulation Analysis', ...
              'Position', [100, 100, 1000, 750], ...
-             'Visible', 'off', ...
+             'Visible', 'on', ...
              'Color', 'w', ...
              'InvertHardcopy', 'off');
 
@@ -178,7 +178,7 @@ print(fig, fig_path, '-dpng', '-r300');
 fprintf('\nComparative visualization plot saved successfully to:\n%s\n', fig_path);
 
 % Close figure to free memory
-close(fig);
+% close(fig);
 
 % --- Helper Functions ---
 function apply_white_theme(fig)
